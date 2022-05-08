@@ -11,7 +11,17 @@ set(BUILD_VERSION "10")
 set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "-Wall -Werror -fPIC")
+if (MSVC)
+    # warning level 4 and all warnings as errors
+    #add_compile_options(/W4 /WX)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
+    #add_definitions(-DHAVE_GETOPT_LONG=1)
+else()
+    # lots of warnings and all warnings as errors
+    add_compile_options(-Wunused-result)
+endif()
+#set(CMAKE_C_FLAGS "-Wall -Werror -fPIC")
+set(CMAKE_POSITION_INDEPENDENT_CODE ON) # -fPIC
 
 set(BASEENCODE_HEADERS src/baseencode.h)
 set(SOURCE_FILES src/base32.c src/base64.c)
